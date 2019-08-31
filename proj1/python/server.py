@@ -57,7 +57,6 @@ class Bridge:
             except Exception as e:
                 log.critical(repr(e))
                 break
-
         self.alive = False
         self.thread_read.join()
 
@@ -80,7 +79,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    srv.bind(('', 10000))
+    srv.bind(('', 7777))
     srv.listen(1)
 
     def signal_handler(signal, frame):
@@ -95,10 +94,10 @@ if __name__ == '__main__':
 
     while 1:
         try:
-            log.info("Waiting for connection...")
+            log.info("Esperando por alguma conexão...")
             connection, addr = srv.accept()
             address, port = addr
-            log.info('Connecting with tcp://{0}:{1}'.format(address, port))
+            log.info('Conectando a tcp://{0}:{1}'.format(address, port))
             r = Bridge(ser, connection)
             r.shortcut()
         except socket.error as msg:
@@ -106,7 +105,7 @@ if __name__ == '__main__':
         finally:
             try:
                 connection.close()
-                log.info('Disconnecting')
+                log.info('Desconectando...')
             except NameError:
                 pass
             except Exception as e:
