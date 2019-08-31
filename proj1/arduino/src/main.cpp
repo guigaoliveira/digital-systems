@@ -1,25 +1,35 @@
 #include <Arduino.h>
 
-int IN3 = 4;
-int IN4 = 5;
-int velocidadeB = 9;
+int period = 100;
+unsigned long time_now = 0;
+
 void setup()
 {
-  //Define os pinos como saida
-  pinMode(IN3, OUTPUT);
-  pinMode(IN4, OUTPUT);
-  pinMode(velocidadeB, OUTPUT);
+  Serial.begin(115200);
+  pinMode(13, OUTPUT);
 }
 
 void loop()
 {
-  //Gira o Motor A no sentido horario
-  analogWrite(velocidadeB, 255);
-  //Gira o Motor B no sentido horario
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
-  delay(2000);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, HIGH);
-  delay(2000);
+  if (Serial.read() == '1')
+  {
+    digitalWrite(13, HIGH);
+    delay(1);
+  }
+  else
+  {
+    digitalWrite(13, LOW);
+    delay(1);
+  }
+  if (millis() > time_now + period)
+  {
+    time_now = millis();
+    float variable = 1.1;
+    String buf;
+    buf += "{\"sensor1\":";
+    buf += String(variable, 6);
+    buf += "}\n";
+    Serial.write(buf.c_str());
+    digitalWrite(13, LOW);
+  }
 }

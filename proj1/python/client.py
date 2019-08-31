@@ -1,10 +1,6 @@
 import socket 
   
 def readlines(sock, buffer_size=2048, delim='\n'):
-    """
-    Read data from socket until connection is closed,
-    and supply a generator interface.
-    """
     buf = ''
     data = True
     while data:
@@ -18,17 +14,18 @@ def readlines(sock, buffer_size=2048, delim='\n'):
 
 def Main(): 
     host = '127.0.0.1'
-    port = 7777
+    port = 10000
   
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
     s.connect((host,port)) 
-    print('Client conected.')
+    print(f'Cliente conectado com sucesso, no endereço e porta: {host}:{port}')
     while True: 
   
      for line in readlines(s):
-        print('New line: ' + line)
+        print('Nova linha: ' + line)
+        s.send(b"1")
 
     s.close() 
   
